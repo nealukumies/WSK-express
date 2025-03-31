@@ -25,11 +25,13 @@ const postCat = (req, res) => {
 
 const putCat = (req, res) => {
   // not implemented in this example, this is future homework
+  res.json({message: 'Cat item updated.'});
   res.sendStatus(200);
 };
 
 const deleteCat = (req, res) => {
   // not implemented in this example, this is future homework
+  res.json({message: 'Cat item deleted.'});
   res.sendStatus(200);
 };
 
