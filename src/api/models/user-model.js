@@ -38,7 +38,7 @@ const listAllUsers = () => {
 };
 
 const findUserById = (id) => {
-  return userItems.find((item) => item.cat_id == id);
+  return userItems.find((item) => item.cat_id === id);
 };
 
 const addUser = (cat) => {
