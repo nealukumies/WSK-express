@@ -20,13 +20,22 @@ const getCatById = async (req, res) => {
 };
 
 const postCat = async (req, res) => {
-  req.body.filename = req.file.filename;
-  const result = await addCat(req.body);
-  if (result.cat_id) {
-    res.status(201);
-    res.json(result);
-  } else {
-    res.sendStatus(400);
+  console.log('postCat called'); // Log when the function is called
+  try {
+    console.log('Request body:', req.body);
+    console.log('File:', req.file);
+    const result = await addCat({
+      cat_name: req.body.cat_name,
+      weight: req.body.weight,
+      owner: req.body.owner,
+      filename: req.file?.filename,
+      birthdate: req.body.birthdate,
+    });
+    console.log('AddCat result:', result);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error('Error in postCat:', error);
+    res.status(500).send('Internal Server Error');
   }
 };
 
