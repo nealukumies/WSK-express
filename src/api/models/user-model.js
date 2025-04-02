@@ -44,7 +44,7 @@ const modifyUser = async (user, id) => {
   return {message: 'success'};
 };
 
-const removeUser = async (id) => {
+const deleteUser = async (id) => {
   const connection = await promisePool.getConnection();
   try {
     await connection.beginTransaction();
@@ -70,4 +70,4 @@ const removeUser = async (id) => {
   }
 };
 
-export {listAllUsers, findUserById, addUser, modifyUser, removeUser};
+export {listAllUsers, findUserById, addUser, modifyUser, deleteUser};
