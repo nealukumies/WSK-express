@@ -8,6 +8,7 @@ import {
 const getUsers = async (req, res) => {
   res.json(await listAllUsers());
 };
+import bcrypt from 'bcrypt';
 
 const getUserById = async (req, res) => {
   const user = await findUserById(req.params.id);
@@ -24,7 +25,7 @@ const postUser = async (req, res) => {
     const result = await addUser({
       name: req.body.name,
       username: req.body.username,
-      password: req.body.password,
+      password: bcrypt.hashSync(req.body.password, 10),
       email: req.body.email,
     });
     res.status(201).json(result);
