@@ -1,0 +1,24 @@
+### Login oikealla salasanalla POST http://localhost:3000/api/v1/auth/login Content-Type: application/json
+
+{
+"username": "nea", "password": "webkehitys"
+}
+results in:
+{
+    "user": {
+        "user_id": 41,
+        "name": "Nea",
+        "username": "nea",
+        "email": "nea@example.com",
+        "role": "user"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MSwibmFtZSI6Ik5lYSIsInVzZXJuYW1lIjoibmVhIiwiZW1haWwiOiJuZWFAZXhhbXBsZS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTc0MzYxMTc3OCwiZXhwIjoxNzQzNjk4MTc4fQ.gIf30mxINtMyWiunKKgUpJ1y7nBi5JXxk3_pHJo9y6Y"
+}
+
+### Login väärällä salasanalla POST http://localhost:3000/api/v1/auth/login Content-Type: application/json
+
+{
+"username": "nea", "password": "webkehitysssss"
+}
+results in: Unauthorized
+

@@ -10,7 +10,7 @@ import {
   deleteCat,
   getCatByOwnerId,
 } from '../controllers/cat-controller.js';
-import createThumbnail from '../../middlewares.js';
+import {createThumbnail} from '../../middlewares.js';
 
 const catRouter = express.Router();
 
