@@ -37,6 +37,11 @@ const postUser = async (req, res) => {
 
 const putUser = async (req, res) => {
   const user = res.locals.user;
+  if (req.body.role && req.body.role === 'admin' && user.role !== 'admin') {
+    return res
+      .status(403)
+      .json({message: 'Unauthorized to change role to admin'});
+  }
   const result = await modifyUser(req.body, req.params.id, user.user_id);
   if (result.message) {
     res.status(200);
@@ -57,4 +62,19 @@ const removeUser = async (req, res) => {
   }
 };
 
-export {getUsers, getUserById, postUser, putUser, removeUser};
+const updateUserRole = async (req, res) => {
+  try {
+    const user = res.locals.user;
+    const result = await modifyUser(user.role, req.params.id);
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    console.error('Error in updateUserRole:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+export {getUsers, getUserById, postUser, putUser, removeUser, updateUserRole};

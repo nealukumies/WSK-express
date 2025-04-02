@@ -33,6 +33,9 @@ const addUser = async (user) => {
 
 const modifyUser = async (user, id, ownerId, role) => {
   let sql;
+  if (user.role && user.role === 'admin' && role !== 'admin') {
+    return {message: 'Unauthorized to change role to admin'};
+  }
   if (role === 'admin') {
     sql = promisePool.format(`UPDATE wsk_users SET ? WHERE user_id = ?`, [
       user,
@@ -92,4 +95,28 @@ const login = async (user) => {
   return rows[0];
 };
 
-export {listAllUsers, findUserById, addUser, modifyUser, deleteUser, login};
+const updateUserRole = async (id, newRole, role) => {
+  if (role !== 'admin') {
+    return {message: 'Unauthorized'};
+  }
+
+  const sql = `UPDATE wsk_users SET role = ? WHERE user_id = ?`;
+  const [rows] = await promisePool.execute(sql, [newRole, id]);
+  console.log('rows', rows);
+
+  if (rows.affectedRows === 0) {
+    return {message: 'User not found or role not updated'};
+  }
+
+  return {message: 'Role updated successfully'};
+};
+
+export {
+  listAllUsers,
+  findUserById,
+  addUser,
+  modifyUser,
+  deleteUser,
+  login,
+  updateUserRole,
+};

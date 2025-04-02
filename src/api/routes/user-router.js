@@ -5,6 +5,7 @@ import {
   postUser,
   putUser,
   removeUser,
+  updateUserRole,
 } from '../controllers/user-controller.js';
 
 import {authenticateToken} from '../../middlewares.js';
@@ -18,5 +19,7 @@ userRouter
   .get(getUserById)
   .put(authenticateToken, putUser)
   .delete(removeUser);
+
+userRouter.put('/:id/role', authenticateToken, updateUserRole);
 
 export default userRouter;
