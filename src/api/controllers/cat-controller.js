@@ -4,6 +4,7 @@ import {
   listAllCats,
   modifyCat,
   removeCat,
+  findCatByOwnerId,
 } from '../models/cat-model.js';
 
 const getCat = async (req, res) => {
@@ -60,17 +61,11 @@ const deleteCat = async (req, res) => {
 };
 
 const getCatByOwnerId = async (req, res) => {
-  try {
-    const ownerId = req.params.ownerId;
-    const cats = await listAllCats();
-    const filteredCats = cats.filter((cat) => cat.ownerId === ownerId);
-    if (filteredCats.length > 0) {
-      res.json(filteredCats);
-    } else {
-      res.sendStatus(404);
-    }
-  } catch {
-    res.status(500).json({error: 'Internal Server Error'});
+  const cat = await findCatByOwnerId(req.params.id);
+  if (cat) {
+    res.json(cat);
+  } else {
+    res.sendStatus(404);
   }
 };
 

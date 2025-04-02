@@ -8,9 +8,9 @@ import {
   postCat,
   putCat,
   deleteCat,
+  getCatByOwnerId,
 } from '../controllers/cat-controller.js';
 import createThumbnail from '../../middlewares.js';
-import {findCatByOwnerId} from '../models/cat-model.js';
 
 const catRouter = express.Router();
 
@@ -34,6 +34,6 @@ catRouter
 
 catRouter.route('/:id').get(getCatById).put(putCat).delete(deleteCat);
 
-catRouter.route('/owner/:id').get(findCatByOwnerId);
+catRouter.route('/owner/:id').get(getCatByOwnerId);
 
 export default catRouter;
