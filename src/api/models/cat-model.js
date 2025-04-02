@@ -34,7 +34,6 @@ const addCat = async (cat) => {
 };
 
 const modifyCat = async (cat, id) => {
-  console.log('Cat object:', cat);
   const sql = promisePool.format(`UPDATE wsk_cats SET ? WHERE cat_id = ?`, [
     cat,
     id,
