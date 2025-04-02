@@ -1,11 +1,16 @@
-import {addUser, findUserById, listAllUsers} from '../models/user-model.js';
-
-const getUser = (req, res) => {
-  res.json(listAllUsers());
+import {
+  listAllUsers,
+  findUserById,
+  addUser,
+  modifyUser,
+  deleteUser,
+} from '../models/user-model.js';
+const getUsers = async (req, res) => {
+  res.json(await listAllUsers());
 };
 
-const getUserById = (req, res) => {
-  const user = findUserById(req.params.id);
+const getUserById = async (req, res) => {
+  const user = await findUserById(req.params.id);
   if (user) {
     res.json(user);
   } else {
@@ -13,26 +18,40 @@ const getUserById = (req, res) => {
   }
 };
 
-const postUser = (req, res) => {
-  const result = addUser(req.body);
-  if (result.user_id) {
-    res.status(201);
-    res.json({message: 'New user added.', result});
+const postUser = async (req, res) => {
+  try {
+    console.log('Request body:', req.body); // Log the request body
+    const result = await addUser({
+      name: req.body.name,
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email,
+    });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error('Error in postUser:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+const putUser = async (req, res) => {
+  const result = await modifyUser(req.body, req.params.id);
+  if (result.message) {
+    res.status(200);
+    res.json(result);
   } else {
     res.sendStatus(400);
   }
 };
 
-const putUser = (req, res) => {
-  // not implemented in this example, this is future homework
-  res.json({message: 'User item updated.'});
-  res.sendStatus(200);
+const removeUser = async (req, res) => {
+  const result = await deleteUser(req.params.id);
+  if (result.message) {
+    res.status(200);
+    res.json(result);
+  } else {
+    res.sendStatus(400);
+  }
 };
 
-const deleteUser = (req, res) => {
-  // not implemented in this example, this is future homework
-  res.json({message: 'User item deleted.'});
-  res.sendStatus(200);
-};
-
-export {getUser, getUserById, postUser, putUser, deleteUser};
+export {getUsers, getUserById, postUser, putUser, removeUser};

@@ -1,11 +1,18 @@
-import {addCat, findCatById, listAllCats} from '../models/cat-model.js';
+import {
+  addCat,
+  findCatById,
+  listAllCats,
+  modifyCat,
+  removeCat,
+  findCatByOwnerId,
+} from '../models/cat-model.js';
 
-const getCat = (req, res) => {
-  res.json(listAllCats());
+const getCat = async (req, res) => {
+  res.json(await listAllCats());
 };
 
-const getCatById = (req, res) => {
-  const cat = findCatById(req.params.id);
+const getCatById = async (req, res) => {
+  const cat = await findCatById(req.params.id);
   if (cat) {
     res.json(cat);
   } else {
@@ -13,38 +20,53 @@ const getCatById = (req, res) => {
   }
 };
 
-const postCat = (req, res) => {
-  const {cat_name, weight, owner, birthdate} = req.body;
-  const filename = req.file ? req.file.filename : null;
-
-  if (!cat_name || !weight || !owner || !birthdate) {
-    return res
-      .status(400)
-      .json({error: 'All fields except image are required'});
+const postCat = async (req, res) => {
+  console.log('postCat called'); // Log when the function is called
+  try {
+    console.log('Request body:', req.body);
+    console.log('File:', req.file);
+    const result = await addCat({
+      cat_name: req.body.cat_name,
+      weight: req.body.weight,
+      owner: req.body.owner,
+      filename: req.file?.filename,
+      birthdate: req.body.birthdate,
+    });
+    console.log('AddCat result:', result);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error('Error in postCat:', error);
+    res.status(500).send('Internal Server Error');
   }
-
-  const newCat = {
-    cat_name,
-    weight: Number(weight),
-    owner: Number(owner),
-    filename,
-    birthdate,
-  };
-  const createdCat = addCat(newCat);
-
-  res.status(201).json({message: 'New cat added.', cat_id: createdCat.cat_id});
 };
 
-const putCat = (req, res) => {
-  // not implemented in this example, this is future homework
-  res.json({message: 'Cat item updated.'});
-  res.sendStatus(200);
+const putCat = async (req, res) => {
+  const result = await modifyCat(req.body, req.params.id);
+  if (result.message) {
+    res.status(200);
+    res.json(result);
+  } else {
+    res.sendStatus(404);
+  }
 };
 
-const deleteCat = (req, res) => {
-  // not implemented in this example, this is future homework
-  res.json({message: 'Cat item deleted.'});
-  res.sendStatus(200);
+const deleteCat = async (req, res) => {
+  const result = await removeCat(req.params.id);
+  if (result.message) {
+    res.status(200);
+    res.json(result);
+  } else {
+    res.sendStatus(404);
+  }
 };
 
-export {getCat, getCatById, postCat, putCat, deleteCat};
+const getCatByOwnerId = async (req, res) => {
+  const cat = await findCatByOwnerId(req.params.id);
+  if (cat) {
+    res.json(cat);
+  } else {
+    res.sendStatus(404);
+  }
+};
+
+export {getCat, getCatById, postCat, putCat, deleteCat, getCatByOwnerId};
