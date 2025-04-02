@@ -3,7 +3,7 @@
 {
 "username": "nea", "password": "webkehitys"
 }
-results in:
+Tuottaa seuraavan tuloksen:
 {
     "user": {
         "user_id": 41,
@@ -20,5 +20,19 @@ results in:
 {
 "username": "nea", "password": "webkehitysssss"
 }
-results in: Unauthorized
+Tuottaa: Unauthorized
 
+
+Tokenin käyttö (Authorization: Bearer <TOKEN>): http://localhost:3000/api/v1/auth/me
+{
+    "message": "token ok",
+    "user": {
+        "user_id": 41,
+        "name": "Nea",
+        "username": "nea",
+        "email": "nea@example.com",
+        "role": "user",
+        "iat": 1743613031,
+        "exp": 1743699431
+    }
+}

@@ -36,7 +36,8 @@ const postUser = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
-  const result = await modifyUser(req.body, req.params.id);
+  const user = res.locals.user;
+  const result = await modifyUser(req.body, req.params.id, user.user_id);
   if (result.message) {
     res.status(200);
     res.json(result);
@@ -46,7 +47,8 @@ const putUser = async (req, res) => {
 };
 
 const removeUser = async (req, res) => {
-  const result = await deleteUser(req.params.id);
+  const user = res.locals.user;
+  const result = await deleteUser(req.params.id, user.role);
   if (result.message) {
     res.status(200);
     res.json(result);

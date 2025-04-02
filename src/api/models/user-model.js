@@ -31,11 +31,19 @@ const addUser = async (user) => {
   return {user_id: rows[0].insertId};
 };
 
-const modifyUser = async (user, id) => {
-  const sql = promisePool.format(`UPDATE wsk_users SET ? WHERE user_id = ?`, [
-    user,
-    id,
-  ]);
+const modifyUser = async (user, id, ownerId, role) => {
+  let sql;
+  if (role === 'admin') {
+    sql = promisePool.format(`UPDATE wsk_users SET ? WHERE user_id = ?`, [
+      user,
+      id,
+    ]);
+  } else {
+    sql = promisePool.format(
+      `UPDATE wsk_users SET ? WHERE user_id = ? AND user_id = ?`,
+      [user, id, ownerId]
+    );
+  }
   const rows = await promisePool.execute(sql);
   console.log('rows', rows);
   if (rows[0].affectedRows === 0) {
@@ -44,7 +52,11 @@ const modifyUser = async (user, id) => {
   return {message: 'success'};
 };
 
-const deleteUser = async (id) => {
+const deleteUser = async (id, role) => {
+  if (role !== 'admin') {
+    return {message: 'Unauthorized'};
+  }
+
   const connection = await promisePool.getConnection();
   try {
     await connection.beginTransaction();
