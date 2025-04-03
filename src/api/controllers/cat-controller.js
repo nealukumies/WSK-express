@@ -21,9 +21,9 @@ const getCatById = async (req, res) => {
 };
 
 const postCat = async (req, res) => {
-  console.log('postCat called'); // Log when the function is called
+  console.log('postCat called');
   try {
-    const catOwner = req.user.user_id;
+    const catOwner = res.locals.user.user_id;
     console.log('Request body:', req.body);
     console.log('File:', req.file);
     const result = await addCat({
