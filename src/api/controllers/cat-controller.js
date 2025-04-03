@@ -28,7 +28,7 @@ const postCat = async (req, res) => {
     const result = await addCat({
       cat_name: req.body.cat_name,
       weight: req.body.weight,
-      owner: req.body.owner,
+      owner: res.locals.user.user_id,
       filename: req.file?.filename,
       birthdate: req.body.birthdate,
     });
@@ -41,7 +41,8 @@ const postCat = async (req, res) => {
 };
 
 const putCat = async (req, res) => {
-  const result = await modifyCat(req.body, req.params.id);
+  const user = res.locals.user;
+  const result = await modifyCat(req.body, req.params.id, user.user_id);
   if (result.message) {
     res.status(200);
     res.json(result);
@@ -51,7 +52,8 @@ const putCat = async (req, res) => {
 };
 
 const deleteCat = async (req, res) => {
-  const result = await removeCat(req.params.id);
+  const user = res.locals.user;
+  const result = await removeCat(req.params.id, user.user_id);
   if (result.message) {
     res.status(200);
     res.json(result);
