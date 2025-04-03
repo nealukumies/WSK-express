@@ -28,7 +28,7 @@ const postCat = async (req, res) => {
     const result = await addCat({
       cat_name: req.body.cat_name,
       weight: req.body.weight,
-      owner: req.body.owner,
+      owner: res.locals.user.user_id,
       filename: req.file?.filename,
       birthdate: req.body.birthdate,
     });
