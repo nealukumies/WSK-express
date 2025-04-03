@@ -21,27 +21,17 @@ const getCatById = async (req, res) => {
 };
 
 const postCat = async (req, res) => {
-  console.log('postCat called');
+  console.log('postCat called'); // Log when the function is called
   try {
-    const catOwner = res.locals.user.user_id;
     console.log('Request body:', req.body);
     console.log('File:', req.file);
-
-    const originalFilename = req.file?.filename;
-
-    const thumbnailFilename = originalFilename
-      ? `${originalFilename}.jpg_thumb`
-      : null;
-
     const result = await addCat({
       cat_name: req.body.cat_name,
       weight: req.body.weight,
-      owner: catOwner,
-      filename: originalFilename,
-      thumbnail: thumbnailFilename,
+      owner: req.body.owner,
+      filename: req.file?.filename,
       birthdate: req.body.birthdate,
     });
-
     console.log('AddCat result:', result);
     res.status(201).json(result);
   } catch (error) {
