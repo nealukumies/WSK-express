@@ -84,7 +84,6 @@ const deleteUser = async (id, role) => {
     connection.release();
   }
 };
-
 const login = async (user) => {
   const sql = `SELECT * FROM wsk_users WHERE username = ?`;
   const [rows] = await promisePool.execute(sql, [user]);

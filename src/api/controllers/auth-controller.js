@@ -4,7 +4,10 @@ import {login} from '../models/user-model.js';
 
 const authUser = async (req, res) => {
   const result = await login(req.body.username);
-
+  if (!result) {
+    res.status(404).json({message: 'User not found'});
+    return;
+  }
   const passwordValid = bcrypt.compareSync(req.body.password, result.password);
 
   console.log('password is valid', passwordValid);
