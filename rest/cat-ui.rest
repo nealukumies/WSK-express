@@ -3,4 +3,7 @@
 Tehtävässä 6 opettaja antoi ohjeet koodin parantamiseksi niin, että se integroituu
 Cat-UI:n kanssa. Useiden kokeilujen jälkeen tehtiin säätöjä, jotta pikkukuvan
 tiedostonimi saatiin käsiteltyä oikein.
-`Klikkaa tästä nähdäksesi kuvakaappauksen <uploads/screenshot_03042025.png>`
+.. raw:: html
+
+   <a href="https://github.com/nealukumies/WSK-express/blob/Assignment6/uploads/screenshot_03042025.png">Klikkaa tästä nähdäksesi kuvakaappauksen</a>
+
