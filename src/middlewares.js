@@ -1,26 +1,31 @@
 import sharp from 'sharp';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import path from 'path';
 
 const createThumbnail = async (req, res, next) => {
-  console.log('todo: tee kuvakäsittely', req.file);
+  console.log('Processing image:', req.file);
+
   if (!req.file) {
-    console.log(req.file);
     next();
     return;
   }
 
-  let extension = 'jpg';
-  if (req.file.mimetype === 'image/png') {
-    // if (req.file.mimetype.includes('/png')) {
-    extension = 'png';
-  }
+  const ext = path.extname(req.file.filename); // Get file extension (.jpg, .png)
+  const baseName = path.basename(req.file.filename, ext); // Filename without extension
+  const thumbName = `${baseName}_thumb${ext}`; // Correct format
+  const thumbPath = path.join(path.dirname(req.file.path), thumbName);
 
-  await sharp(req.file.path)
-    .resize(100, 100)
-    .toFile(`${req.file.path}_thumb.${extension}`);
-  console.log(req.file);
-  next();
+  try {
+    await sharp(req.file.path).resize(100, 100).toFile(thumbPath);
+
+    req.file.thumbname = thumbName; // Save for database
+    console.log('Thumbnail created:', thumbName);
+    next();
+  } catch (error) {
+    console.error('Thumbnail creation failed:', error);
+    next(error);
+  }
 };
 
 const authenticateToken = (req, res, next) => {
