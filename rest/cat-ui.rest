@@ -2,8 +2,8 @@
 
 Tehtävässä 6 opettaja antoi ohjeet koodin parantamiseksi niin, että se integroituu
 Cat-UI:n kanssa. Useiden kokeilujen jälkeen tehtiin säätöjä, jotta pikkukuvan
-tiedostonimi saatiin käsiteltyä oikein.
-.. raw:: html
+tiedostonimi saatiin käsiteltyä oikein. Kuvassa osa kissoista siis siksi ilman pikkukuvaa.
 
-   <a href="https://github.com/nealukumies/WSK-express/blob/Assignment6/uploads/screenshot_03042025.png">Klikkaa tästä nähdäksesi kuvakaappauksen</a>
+
+https://github.com/nealukumies/WSK-express/blob/Assignment6/uploads/screenshot_03042025.png
 
