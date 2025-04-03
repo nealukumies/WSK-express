@@ -1,0 +1,10 @@
+# Koodin Parantaminen Cat-UI:lle Toimivaksi
+
+Tehtävässä 6 opettaja antoi ohjeet koodin parantamiseksi niin, että se integroituu
+Cat-UI:n kanssa. Useiden kokeilujen jälkeen tehtiin säätöjä, jotta pikkukuvan
+tiedostonimi saatiin käsiteltyä oikein. Alla on kuvakaappaus testituloksesta:
+
+.. image:: uploads/screenshot_03042025.png
+   :alt: Kuvakaappaus, joka näyttää testauksessa käytetyn tiedostopolun, jossa on joitain kissoja, joilla ei ole toimivaa pikkukuvaa
+   :width: 500px
+   :align: center
