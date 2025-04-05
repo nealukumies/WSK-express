@@ -48,9 +48,8 @@ catRouter
   .get(getCat)
   .post(
     authenticateToken,
-    upload.single('file'),
     [
-      body('name').notEmpty().withMessage('Name is required'),
+      body('cat_name').notEmpty().withMessage('Name is required'),
       body('birthdate')
         .isISO8601()
         .withMessage('Birthdate must be a valid date')
@@ -61,14 +60,18 @@ catRouter
         .withMessage('Weight must be a positive number'),
     ],
     (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+      }
+      next();
+    },
+    upload.single('file'),
+    (req, res, next) => {
       if (!req.file) {
         return res
           .status(400)
           .json({errors: [{msg: 'File is required', param: 'file'}]});
-      }
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
       }
       next();
     },
