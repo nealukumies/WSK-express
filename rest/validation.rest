@@ -5,4 +5,5 @@ joka tarkistaa käyttäjän syöttämät tiedot ennen niiden tallentamista.
 - Kissa: nimi on pakollinen, syntymäaika muodossa VVVV-KK-PP, paino on positiivinen luku
 - Käyttäjä: käyttäjänimi 3-20 kirjainta, sähköposti on sähköposti, salasana vähintään 8 merkkiä
 Käyttöliittymässä testattu validaatio ja virheenkäsittelyä:
-
+https://github.com/nealukumies/WSK-express/blob/main/uploads/addcatvalidation_05042025.png
+https://github.com/nealukumies/WSK-express/blob/main/uploads/modifycatvalidation_05042025.png
