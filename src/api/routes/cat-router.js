@@ -11,6 +11,7 @@ import {
   getCatByOwnerId,
 } from '../controllers/cat-controller.js';
 import {createThumbnail, authenticateToken} from '../../middlewares.js';
+import {body, param, validationResult} from 'express-validator';
 
 const catRouter = express.Router();
 
@@ -25,17 +26,84 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({storage: storage});
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // max 10 MB
+  },
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype.startsWith('image/') ||
+      file.mimetype.startsWith('video/')
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
+});
 
 catRouter
   .route('/')
   .get(getCat)
-  .post(authenticateToken, upload.single('file'), createThumbnail, postCat);
+  .post(
+    authenticateToken,
+    upload.single('file'),
+    [
+      body('name').notEmpty().withMessage('Name is required'),
+      body('birthdate')
+        .isISO8601()
+        .withMessage('Birthdate must be a valid date')
+        .matches(/^\d{4}-\d{2}-\d{2}$/)
+        .withMessage('Birthdate must be in YYYY-MM-DD format'),
+      body('weight')
+        .isFloat({min: 0})
+        .withMessage('Weight must be a positive number'),
+    ],
+    (req, res, next) => {
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({errors: [{msg: 'File is required', param: 'file'}]});
+      }
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+      }
+      next();
+    },
+    createThumbnail,
+    postCat
+  );
 
 catRouter
   .route('/:id')
   .get(getCatById)
-  .put(authenticateToken, putCat)
+  .put(
+    authenticateToken,
+    [
+      param('id').isInt().withMessage('Invalid cat ID'),
+      body('name').optional().notEmpty().withMessage('Name cannot be empty'),
+      body('birthdate')
+        .optional()
+        .isISO8601()
+        .withMessage('Birthdate must be a valid date')
+        .matches(/^\d{4}-\d{2}-\d{2}$/)
+        .withMessage('Use YYYY-MM-DD format'),
+      body('weight')
+        .optional()
+        .isFloat({min: 0})
+        .withMessage('Weight must be a positive number'),
+    ],
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+      }
+      next();
+    },
+    putCat
+  )
   .delete(authenticateToken, deleteCat);
 
 catRouter.route('/owner/:id').get(getCatByOwnerId);

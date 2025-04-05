@@ -8,6 +8,7 @@ import {
 const getUsers = async (req, res) => {
   res.json(await listAllUsers());
 };
+import {validationResult} from 'express-validator';
 import bcrypt from 'bcrypt';
 
 const getUserById = async (req, res) => {
@@ -19,19 +20,33 @@ const getUserById = async (req, res) => {
   }
 };
 
-const postUser = async (req, res) => {
+const postUser = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Invalid or missing fields');
+    error.status = 400;
+    return next(error);
+  }
   try {
-    console.log('Request body:', req.body); // Log the request body
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const result = await addUser({
       name: req.body.name,
       username: req.body.username,
-      password: bcrypt.hashSync(req.body.password, 10),
+      password: hashedPassword,
       email: req.body.email,
     });
-    res.status(201).json(result);
+    res.json({message: 'new user added', result});
   } catch (error) {
-    console.error('Error in postUser:', error);
-    res.status(500).send('Internal Server Error');
+    console.error('Error adding user:', error);
+    if (error.code === 'ER_DUP_ENTRY') {
+      const err = new Error('Duplicate entry, user already exists');
+      err.status = 400;
+      return next(err);
+    } else {
+      const err = new Error('Internal Server Error');
+      err.status = 500;
+      return next(err);
+    }
   }
 };
 
