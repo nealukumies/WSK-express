@@ -1,0 +1,8 @@
+# Koodin Parantaminen: Virheenkäsittely & validaatio
+
+Tehtävässä 7 paranneltiin koodin virheenkäsittelyä ja syötteiden validaatiota. Käytössä on express-validator-kirjasto,
+joka tarkistaa käyttäjän syöttämät tiedot ennen niiden tallentamista.
+- Kissa: nimi on pakollinen, syntymäaika muodossa VVVV-KK-PP, paino on positiivinen luku
+- Käyttäjä: käyttäjänimi 3-20 kirjainta, sähköposti on sähköposti, salasana vähintään 8 merkkiä
+Käyttöliittymässä testattu validaatio ja virheenkäsittelyä:
+
